@@ -5,44 +5,48 @@ import numpy
 
 def compute_height(n, parents):
     # Write this function
-    paren = numpy.zeros(n)
-    def height(i):
-        if paren[i] != 0:
-            return paren[i]
-        if paren[i] == -1:
-            paren[i] = 1
+    height = n*[-1]
+    def augstums(node):
+        if height[node] != -1:
+            return height[node]
+        if parents[node] == -1:
+            height[node] = 1
         else:
-            paren[i] = height(paren[i])+1
-        return paren[i]
-    # Your code here
-    for i in range(n):
-        height(i)
-    return int(max(paren))
+            height[node] = augstums(parents[node])+1
+    max_height = 0
+
+    for root in range(n):
+        max_height = max(max_height,augstums(root))
+    return max_height
        
 def main():
     # implement input form keyboard and from files
-    input_type = input()
+    text = input("I or F: ")
     # let user input file name to use, don't allow file names with letter a
     # account for github input inprecision
     # input number of elements
     # input values in one variable, separate with space, split these values in an array
     # call the function and output it's result
-    if "F" in input_type:
+    if "F" in text:
         filename = input()
-        if ".a" in filename:
+        test = './test/'
+        file = test + filename
+        if "a" not in filename:
+            try:
+                with open(file) as x:
+                    n = int(x.readline())
+                    parents = list(map(int,x.readline().split()))
+            except Exception as y:
+                print("Error",str(y))
+                return
+        else:
+            print("Error")
             return
-        if "test/" not in filename:
-            filename = "test/" + filename
-        if "test/" in filename:
-            with open(filename) as f:
-                n = int(f.readline().strip())
-                parents = list(map(int,f.readline().split()))
-                height = compute_height(n, parents)
-    elif "I" in input_type:
+    elif "I" in text:
         n = int(input())
         parents = list(map(int,input().split()))
-        height = compute_height(n,parents)
-    print(height)
+    print(compute_height(n,parents))
+    
 # In Python, the default limit on recursion depth is rather low,
 # so raise it here for this problem. Note that to take advantage
 # of bigger stack, we have to launch the computation in a new thread.
