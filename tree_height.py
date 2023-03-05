@@ -1,58 +1,47 @@
 # python3
-
 import sys
 import threading
 import numpy
 
-
 def compute_height(n, parents):
     # Write this function
-    height = n*[-1]
-    def aug(node):
-        if height[node] != -1:
-            return height[node]
-        if parents[node] == -1:
-            height[node] = 1
+    p = numpy.zeros(n)
+    def height(i):
+        if p[i] != 0:
+            return paren[i]
+        if p[i] == -1:
+            p[i] = 1
         else:
-            height[node] = aug(parents[node])+1
-        return height[node]
-           
-    max_height = 0
+            p[i] = height(p[i])+1
+        return p[i]
     # Your code here
-    for root in range(n):
-        max_height = max(max_height,aug(root))
-    return max_height
-
-
+    for i in range(n):
+        height(i)
+    return int(max(p))   
 def main():
     # implement input form keyboard and from files
-    text = input("I or F: ")
+    input_type = input()
     # let user input file name to use, don't allow file names with letter a
     # account for github input inprecision
-    if "I" in text:
-        n = int(input())
-        parents = list(map(int, input().split()))
-    elif "F" in text:
-        filename = input()
-        test ='./test/'
-        file = test + filename
-        if "a" not in filename:
-            try:
-                with open(file) as x:
-                    n = int(x.readline())
-                    parents = list(map(int,x.readline().split()))
-            except Exception as y:
-                print("Error",str(y))
-                return
-        else:
-            print("Error")
-            return
-    print(compute_height(n,parents))
-    
     # input number of elements
     # input values in one variable, separate with space, split these values in an array
     # call the function and output it's result
-
+    if "F" in input_type:
+        filename = input()
+        if ".a" in filename:
+            return
+        if "test/" not in filename:
+            filename = "test/" + filename
+        if "test/" in filename:
+            with open(filename) as f:
+                n = int(f.readline().strip())
+                parents = list(map(int,f.readline().split()))
+                height = compute_height(n, parents)
+    elif "I" in input_type:
+        n = int(input())
+        parents = list(map(int,input().split()))
+        height = compute_height(n,parents)
+    print(height)
 # In Python, the default limit on recursion depth is rather low,
 # so raise it here for this problem. Note that to take advantage
 # of bigger stack, we have to launch the computation in a new thread.
