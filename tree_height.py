@@ -1,10 +1,13 @@
 # python3
+
 import sys
 import threading
 import numpy
 
+
 def compute_height(n, parents):
     height = n*[-1]
+    
     def augstums(node):
         if height[node] != -1:
             return height[node]
@@ -13,17 +16,23 @@ def compute_height(n, parents):
         else:
              height[node] = augstums(parents[node])+1
         return  height[node]
+   
     max_height = 0
+    
     for root in range(n):
         max_height = max(max_height,augstums(root))
     return max_height
 
+
 def main():
     text=input("I or F: ")
-    if "F" in text:
+    if "I" in text:
+       n=int(input())
+       parents=list(map(int, input().split()))
+    elif "F" in text:
         FileName = input()
         tests ='./test/'
-        file = test + FileName
+        file = tests+FileName
         if "a" not in FileName:
             try:
                 with open(file) as x:
@@ -34,13 +43,10 @@ def main():
                 return
         else:
             print("Error")
-            return   
-    elif "I" in text:
-       n=int(input())
-       parents=list(map(int, input().split())) 
+            return    
         
     print(compute_height(n,parents))    
-     
+    
 # In Python, the default limit on recursion depth is rather low,
 # so raise it here for this problem. Note that to take advantage
 # of bigger stack, we have to launch the computation in a new thread.
@@ -48,3 +54,4 @@ sys.setrecursionlimit(10**7)  # max depth of recursion
 threading.stack_size(2**27)   # new thread will get stack of such size
 threading.Thread(target=main).start()
 # print(numpy.array([1,2,3]))
+
