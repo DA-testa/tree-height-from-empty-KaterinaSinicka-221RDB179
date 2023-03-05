@@ -5,19 +5,20 @@ import numpy
 
 def compute_height(n, parents):
     # Write this function
-    p = numpy.zeros(n)
+    paren = numpy.zeros(n)
     def height(i):
-        if p[i] != 0:
+        if paren[i] != 0:
             return paren[i]
-        if p[i] == -1:
-            p[i] = 1
+        if paren[i] == -1:
+            paren[i] = 1
         else:
-            p[i] = height(p[i])+1
-        return p[i]
+            paren[i] = height(paren[i])+1
+        return paren[i]
     # Your code here
     for i in range(n):
         height(i)
-    return int(max(p))   
+    return int(max(paren))
+       
 def main():
     # implement input form keyboard and from files
     input_type = input()
